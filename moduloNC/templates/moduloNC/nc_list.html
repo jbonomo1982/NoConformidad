@@ -1,0 +1,20 @@
+{% extends "moduloNC/base.html" %}
+
+{% block content %}
+    <h1>Lista de No Conformidades</h1>
+
+    {% if nc_list %}
+    <ul>
+
+      {% for nc in nc_list %}
+      <li>
+        <a href="{% url 'nc-detail' pk=nc.pk %}">{{ nc.titulo }}</a> 
+        <p>{{nc.get_absolute_url}}</p>
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>No se ingresó ninguna No Conformidad.</p>
+    {% endif %}       
+{% endblock %}

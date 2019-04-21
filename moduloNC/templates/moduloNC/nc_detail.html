@@ -1,0 +1,18 @@
+{% extends "moduloNC/base.html" %}
+
+{% block content %}
+  <h1>No Conformidad: {{ nc.codigo }}</h1>
+
+  <p><strong>Autor:</strong> <p>{{ nc.autor }}</p> 
+  <p><strong>Título:</strong> {{ nc.titulo }}</p>
+  <p><strong>Sector:</strong> {{ nc.sector }}</p> 
+  <p><strong>Fecha de apertura:</strong> {{ nc.fechaApertura }}</p> 
+  <p><strong>Cerrado:</strong> {{ nc.cerrada }}</p>  
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Desarrollo:</h4>
+    <p> {{ nc.descripcion }}</p>  
+
+
+    
+  </div>
+{% endblock %}
