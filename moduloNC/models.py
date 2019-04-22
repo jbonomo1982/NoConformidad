@@ -23,7 +23,7 @@ class NC(models.Model):
     fechaApertura = models.DateTimeField(
             default=timezone.now)
     fechaSuceso = models.DateTimeField(
-            blank=True, null=True)
+            blank=True, null=True ,help_text="Ingresar dd/mm/aaaa hh:mm:ss")
     sector= models.ForeignKey(Sector, default=None, on_delete=models.CASCADE)
 
     cerrada = models.BooleanField(default=False,help_text="Indica si la NC está cerrada.")

@@ -3,6 +3,8 @@
 from django.shortcuts import render
 from .models import NC
 from django.views import generic
+from .forms import NCForm
+from django.shortcuts import redirect
 
 # Create your views here.
 
@@ -16,3 +18,15 @@ class NCListView(generic.ListView):
 
 class NCDetailView(generic.DetailView):
     model = NC
+
+def nc_new(request):
+    if request.method == "POST":
+        form = NCForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.autor = request.user
+            post.save()
+            return redirect('nc-detail', pk=post.pk)
+    else:
+        form = NCForm()
+    return render(request, 'moduloNC/nueva_nc.html', {'form': form})
