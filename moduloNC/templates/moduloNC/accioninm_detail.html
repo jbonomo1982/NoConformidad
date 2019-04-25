@@ -1,0 +1,15 @@
+{% extends "moduloNC/base.html" %}
+
+{% block content %}
+  <h1>Acción Inmediata: {{ accioninm.pk }}</h1>
+
+  <p><strong>Autor:</strong> <p>{{ accioninm.autor }}</p> 
+  <p><strong>De la NC:</strong> {{ accioninm.nc }}</p>
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Desarrollo:</h4>
+    <p> {{ accioninm.text }}</p>  
+
+
+    
+  </div>
+{% endblock %}

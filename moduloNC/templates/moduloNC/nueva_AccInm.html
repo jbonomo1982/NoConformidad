@@ -1,0 +1,15 @@
+{% extends 'moduloNC/base.html' %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <h1>Nueva Acción Inmediata</h1>
+        <form method="POST" class="AccionInmForm">{% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="save btn btn-default">Guardar</button>
+        </form>
+
+    {% else %}
+        <h2>Por favor loguearse para crear una Acción Inmediata</h2>
+        <a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+    {% endif %}
+{% endblock %}
