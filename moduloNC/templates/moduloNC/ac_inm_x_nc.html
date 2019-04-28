@@ -1,0 +1,25 @@
+{% extends "moduloNC/base.html" %}
+
+{% block content %}
+    <h1>Lista de Acciones Inmediatas de la No Conformidad {{nc}} </h1>
+
+    {% if ai %}
+    <ul>
+
+      {% for a in ai %}
+      <li>
+        <a href="{% url 'AccionInm-detail' pk=a.pk %}">{{ a.pk }}</a>
+        
+        
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>No se encontró ninguna acción inmediata para la NC {{nc}}.</p>
+    {% endif %}  
+    
+    <h2>Crear nueva Acción Inmediata</h2>
+    <a href="{% url 'nuevaAccionInm' pk=nc %}">Abrir Acc. Inmediata</a></li>
+
+{% endblock %}

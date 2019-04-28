@@ -8,8 +8,16 @@
   <div style="margin-left:20px;margin-top:20px">
     <h4>Desarrollo:</h4>
     <p> {{ accioninm.text }}</p>  
+  </div>
+  
 
+
+  {% if user.is_authenticated %}
 
     
-  </div>
+      <a href="{% url 'AccionInm-edit' pk=accioninm.pk %}">Editar esta Acción Inmediata</a>
+    
+
+  {% endif %}
+  
 {% endblock %}

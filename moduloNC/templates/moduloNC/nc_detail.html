@@ -9,10 +9,26 @@
   <p><strong>Fecha de apertura:</strong> {{ nc.fechaApertura }}</p> 
   <p><strong>Cerrado:</strong> {{ nc.cerrada }}</p>  
   <div style="margin-left:20px;margin-top:20px">
-    <h4>Desarrollo:</h4>
+    <h4>Descripción de la NC:</h4>
     <p> {{ nc.descripcion }}</p>  
+  </div>
 
+
+  {% if user.is_authenticated %}
+  <h2>Trabajar sobre la NC:</h2>
+  <ul>
+    <li><a href="{% url 'accionInm_por_NC'%}?NC={{ nc.pk }}">acciones inmediatas (Ver crear y editar) </a></li>
+  
+    <li>análisis de causa</li>
+    <li>acción correctiva</li>
+    <li>verificación</li>
+    <li>archivos adjuntos</li>
+  </ul>
+  {% endif %}
+
+  <h2>Ver informe de la No Conformidad</h2>
+  <p>Si quiere ver una presentación de la NC, con todos los datos disponibles, haga click aquí.</p>
 
     
-  </div>
+  
 {% endblock %}

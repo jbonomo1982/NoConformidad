@@ -12,4 +12,4 @@ class AccionInmForm(ModelForm):
 
     class Meta:
         model = AccionInm
-        fields = ('nc','text')
+        fields = ('text',)
