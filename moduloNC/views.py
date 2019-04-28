@@ -3,7 +3,7 @@
 from django.shortcuts import render
 from .models import NC, AccionInm
 from django.views import generic
-from .forms import NCForm,AccionInmForm
+from .forms import NCForm, AccionInmForm, AccionInmFormEditor
 from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponse
 from django.utils import timezone
@@ -52,19 +52,45 @@ def AccionInm_edit(request, pk):
     post = get_object_or_404(AccionInm, pk=pk)
     usuario_req = request.user.username
     usuario_Ai = post.autor
+    grupo = request.user.groups.filter(name='Editor_Responsable').exists()
     if str(usuario_Ai) != str(usuario_req):
-        return HttpResponse("Tiene que ser el creador de la AI ("+str(usuario_Ai) +") para poder editarla.")
+        if not grupo:
+            return HttpResponse("Tiene que ser el creador de la AI ("+str(usuario_Ai) +") para poder editarla." + str(grupo))
     if request.method == "POST":
         form = AccionInmForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.created_date = timezone.now()
-            post.save()
-            return redirect('AccionInm-detail', pk=post.pk)
+        if grupo:
+            formE = AccionInmFormEditor(request.POST,instance=post)
+            if form.is_valid() and formE.is_valid():
+                post = form.save(commit=False)
+                post2 = formE.save(commit=False)
+                post.author = request.user
+                post.created_date = timezone.now()
+                post.save()
+                post2.save()
+                #Si se cambia el estado a publicado, tiene que cambiar todos los
+                #otros ingresos de AI de la misma NC a no publicado.
+                if post2.publicado == True:
+                    print("publicado")
+                    nc = post.nc
+                    print(nc)
+                    otrasAI = AccionInm.objects.filter(nc = nc).exclude(pk=post.pk)
+                    otrasAI.update(publicado=False)
+
+                return redirect('AccionInm-detail', pk=post.pk)
+
+        else:
+            formE = None
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = request.user
+                post.created_date = timezone.now()
+                post.save()
+                return redirect('AccionInm-detail', pk=post.pk)
+        
     else:
         form = AccionInmForm(instance=post)
-    return render(request, 'moduloNC/nueva_AccInm.html', {'form': form})
+        formE = AccionInmFormEditor(instance=post)
+    return render(request, 'moduloNC/nueva_AccInm.html', {'form': form,'formE':formE})
 
 
 class AccionInmDetailView(generic.DetailView):

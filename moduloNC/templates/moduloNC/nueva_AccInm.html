@@ -5,6 +5,11 @@
         <h1>Nueva Acción Inmediata de la NC {{nc.pk}}</h1>
         <form method="POST" class="AccionInmForm">{% csrf_token %}
             {{ form.as_p }}
+            {% for group in user.groups.all %}
+                {% if group.name == 'Editor_Responsable' %}
+                    {{formE.as_p}}
+                {% endif %}
+            {% endfor %}
             <button type="submit" class="save btn btn-default">Guardar</button>
         </form>
 

@@ -13,3 +13,9 @@ class AccionInmForm(ModelForm):
     class Meta:
         model = AccionInm
         fields = ('text',)
+
+class AccionInmFormEditor(ModelForm):
+
+    class Meta:
+        model = AccionInm
+        fields = ('publicado',)

@@ -69,6 +69,10 @@ class AccionInm(models.Model):
     "Describir cómo se trato corregir la acción que genera la NC, en una prímera instancia")
     publicado = models.BooleanField(default=False,help_text="Indica si la entrada está aceptada.")
 
+    def despublicar(self):
+        self.publicado = False
+
+
     def __str__(self):
         return 'Acción Inm: {0} {1}'.format(self.autor,self.nc)
 

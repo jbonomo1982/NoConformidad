@@ -9,6 +9,13 @@
     <h4>Desarrollo:</h4>
     <p> {{ accioninm.text }}</p>  
   </div>
+
+  {% if accioninm.publicado%}
+    <p>Esta Acción Inmediata  está publicada</p>
+  
+  {% else %}
+    <p>Esta acción inmediata no está publicada.</p>
+  {% endif %}
   
 
 
