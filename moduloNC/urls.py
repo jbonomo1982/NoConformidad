@@ -11,5 +11,6 @@ urlpatterns = [
     path('AccionInm/<int:pk>/',views.AccionInmDetailView.as_view(),name='AccionInm-detail'),
     path('accionInm_por_NC', views.accionInm_por_NC, name='accionInm_por_NC'),
     path('AccionInm_edit/<int:pk>/',views.AccionInm_edit,name='AccionInm-edit'),
+    path('AccionInm_publicar/<int:pk>/',views.AccionInm_publicar,name='AccionInm-publicar'),
 
 ]

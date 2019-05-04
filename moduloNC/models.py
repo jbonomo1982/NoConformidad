@@ -13,7 +13,6 @@ class Sector(models.Model):
         return d
 
 
-
 class NC(models.Model):
 
     autor = models.ForeignKey('auth.User', on_delete=models.CASCADE)
@@ -28,8 +27,16 @@ class NC(models.Model):
 
     cerrada = models.BooleanField(default=False,help_text="Indica si la NC está cerrada.")
 
+
     def __str__(self):
         return '{0} {1}'.format(self.titulo,self.codigo)
+
+class Contribuyente(models.Model):
+    contribuyente = models.ManyToManyField('auth.User')
+    nc = models.OneToOneField(NC, on_delete=models.CASCADE)
+    def __str__(self):
+        return 'Contribuyentes de {0}'.format(self.nc)
+
 
 
 
@@ -68,7 +75,7 @@ class AccionInm(models.Model):
     text = models.TextField(help_text=
     "Describir cómo se trato corregir la acción que genera la NC, en una prímera instancia")
     publicado = models.BooleanField(default=False,help_text="Indica si la entrada está aceptada.")
-
+    fecha_publicado = models.DateTimeField(blank=True,null=True)
     def despublicar(self):
         self.publicado = False
 

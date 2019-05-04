@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import NC, CierreNC, AnalisisCausa, AccionInm, AccionCorrectiva, VerificaAC, Archivo, Sector
+from .models import NC, CierreNC, AnalisisCausa, AccionInm, AccionCorrectiva, VerificaAC, Archivo, Sector, Contribuyente
 
 # Register your models here.
 
@@ -11,7 +11,7 @@ admin.site.register(AccionCorrectiva)
 admin.site.register(VerificaAC)
 admin.site.register(Archivo)
 admin.site.register(Sector)
-
+admin.site.register(Contribuyente)
 
 
 

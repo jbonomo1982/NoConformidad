@@ -22,9 +22,15 @@
   {% if user.is_authenticated %}
 
     
-      <a href="{% url 'AccionInm-edit' pk=accioninm.pk %}">Editar esta Acción Inmediata</a>
-    
+    <a href="{% url 'AccionInm-edit' pk=accioninm.pk %}">Editar esta Acción Inmediata</a>
 
   {% endif %}
+
+  {% for group in user.groups.all %}
+    {% if group.name == 'Editor_Responsable' %}
+    <br>
+    <a href="{% url 'AccionInm-publicar' pk=accioninm.pk %}">Publicar esta Acción Inmediata</a>          
+    {% endif %}
+  {% endfor %}
   
 {% endblock %}

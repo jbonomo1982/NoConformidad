@@ -1,7 +1,7 @@
 # Create your views here.
 
 from django.shortcuts import render
-from .models import NC, AccionInm
+from .models import NC, AccionInm, Contribuyente
 from django.views import generic
 from .forms import NCForm, AccionInmForm, AccionInmFormEditor
 from django.shortcuts import redirect, get_object_or_404
@@ -28,6 +28,8 @@ def nc_new(request):
             post = form.save(commit=False)
             post.autor = request.user
             post.save()
+            c = Contribuyente(nc=NC.objects.get(pk = post.pk))
+            c.save()
             return redirect('nc-detail', pk=post.pk)
     else:
         form = NCForm()
@@ -40,6 +42,12 @@ def AccionInm_new(request,pk):
         if form.is_valid():
             post = form.save(commit=False)
             post.autor = request.user
+            if nc.autor != post.autor:
+                if Contribuyente.objects.get(nc=nc):
+                    a = Contribuyente.objects.get(nc=nc)
+                    a.contribuyente.add(request.user)
+                    a.save()
+                    
             post.nc = nc
             post.save()
             return redirect('AccionInm-detail', pk=post.pk)
@@ -49,43 +57,60 @@ def AccionInm_new(request,pk):
     return render(request, 'moduloNC/nueva_AccInm.html', {'form': form,'nc':nc})
 
 def AccionInm_edit(request, pk):
+    #Editar en realidad tiene que ser crear una nueva instancia sobre otra anterior
+    post = get_object_or_404(AccionInm, pk=pk)
+    nc = post.nc
+    if request.method == "POST":
+        form = AccionInmForm(request.POST)
+        
+        if form.is_valid():
+            b= form.save(commit=False)
+            b.autor = request.user
+            b.nc = nc
+
+            if nc.autor != request.user:
+                if Contribuyente.objects.get(nc=nc):
+                    a = Contribuyente.objects.get(nc=nc)
+                    a.contribuyente.add(request.user)
+                    a.save()
+
+            b.created_date = timezone.now()
+            b.save()
+            return redirect('AccionInm-detail', pk=b.pk)
+
+        
+    else:
+        form = AccionInmForm(initial={'text':post.text})
+    return render(request, 'moduloNC/nueva_AccInm.html', {'form': form})
+
+def AccionInm_publicar(request, pk):
+    #Solo los usuarios editores pueden publicar.
     post = get_object_or_404(AccionInm, pk=pk)
     usuario_req = request.user.username
     usuario_Ai = post.autor
     grupo = request.user.groups.filter(name='Editor_Responsable').exists()
-    if str(usuario_Ai) != str(usuario_req):
-        if not grupo:
-            return HttpResponse("Tiene que ser el creador de la AI ("+str(usuario_Ai) +") para poder editarla." + str(grupo))
+    if not grupo:
+        return HttpResponse("Tiene que tener un usuario con perfil de editor. " + str(usuario_req))
     if request.method == "POST":
-        form = AccionInmForm(request.POST, instance=post)
+        
         if grupo:
             formE = AccionInmFormEditor(request.POST,instance=post)
-            if form.is_valid() and formE.is_valid():
-                post = form.save(commit=False)
+            if formE.is_valid():
+                
                 post2 = formE.save(commit=False)
-                post.author = request.user
-                post.created_date = timezone.now()
-                post.save()
+                
+            
                 post2.save()
                 #Si se cambia el estado a publicado, tiene que cambiar todos los
                 #otros ingresos de AI de la misma NC a no publicado.
                 if post2.publicado == True:
                     print("publicado")
-                    nc = post.nc
+                    nc = post2.nc
                     print(nc)
-                    otrasAI = AccionInm.objects.filter(nc = nc).exclude(pk=post.pk)
+                    otrasAI = AccionInm.objects.filter(nc = nc).exclude(pk=post2.pk)
                     otrasAI.update(publicado=False)
 
-                return redirect('AccionInm-detail', pk=post.pk)
-
-        else:
-            formE = None
-            if form.is_valid():
-                post = form.save(commit=False)
-                post.author = request.user
-                post.created_date = timezone.now()
-                post.save()
-                return redirect('AccionInm-detail', pk=post.pk)
+                return redirect('AccionInm-detail', pk=post2.pk)
         
     else:
         form = AccionInmForm(instance=post)
