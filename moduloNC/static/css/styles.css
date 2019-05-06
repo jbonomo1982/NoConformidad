@@ -4,3 +4,21 @@
     list-style: none;
 }
 
+#id_honeypot {
+    display: none;
+}
+
+#wrapper{ 
+    background: cornflowerblue;
+}
+.derecha {
+    padding-top: 20px;
+    margin-left: 15%;
+    background: aquamarine;
+}
+
+.izquierda {
+    float: left;
+    background: lightblue;
+    
+}

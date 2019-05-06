@@ -127,6 +127,3 @@ class Archivo(models.Model):
 
 
 
-
-
-
