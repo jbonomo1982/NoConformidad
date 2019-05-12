@@ -1,0 +1,20 @@
+{% extends 'moduloNC/base.html' %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <h1>Análisis de causa de la NC {{nc.pk}}</h1>
+        <form method="POST" class="AccionInmForm">{% csrf_token %}
+            {{ form.as_p }}
+            {% for group in user.groups.all %}
+                {% if group.name == 'Editor_Responsable' %}
+                    {{formE.as_p}}
+                {% endif %}
+            {% endfor %}
+            <button type="submit" class="save btn btn-default">Guardar</button>
+        </form>
+
+    {% else %}
+        <h2>Por favor loguearse para crear un Análisis de causa</h2>
+        <a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+    {% endif %}
+{% endblock %}

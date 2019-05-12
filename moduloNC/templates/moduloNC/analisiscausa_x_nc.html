@@ -1,0 +1,25 @@
+{% extends "moduloNC/base.html" %}
+
+{% block content %}
+    <h1>Lista de análisis de causa para la nc {{nc}} </h1>
+
+    {% if ac %}
+    <ul>
+
+      {% for a in ac %}
+      <li>
+        <a href="{% url 'AnalisisCausa-detail' pk=a.pk %}">{{ a.pk }}</a>
+        
+        
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>No se encontró ningún análisis de causa para la NC {{nc}}.</p>
+    {% endif %}  
+    
+    <h2>Crear nuevo análisis de causa</h2>
+    <a href="{% url 'nuevaAnalisis' pk=nc %}">Abrir Análisis de causa</a></li>
+
+{% endblock %}
