@@ -1,0 +1,36 @@
+{% extends "moduloNC/base.html" %}
+
+{% block content %}
+  <h1>Análisis de causa: {{ accioncorrectiva.pk }}</h1>
+
+  <p><strong>Autor:</strong> <p>{{ accioncorrectiva.autor }}</p> 
+  <p><strong>De la NC:</strong> {{ accioncorrectiva.nc }}</p>
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Desarrollo:</h4>
+    <p> {{ accioncorrectiva.text }}</p>  
+  </div>
+
+  {% if accioncorrectiva.publicado%}
+    <p>Esta Acción Correctiva  está publicada</p>
+  
+  {% else %}
+    <p>Esta acción correctiva no está publicada.</p>
+  {% endif %}
+  
+
+
+  {% if user.is_authenticated %}
+
+    
+    <a href="{% url 'AccionCorrectiva-edit' pk=accioncorrectiva.pk %}">Editar este acción correctiva.</a>
+
+  {% endif %}
+
+  {% for group in user.groups.all %}
+    {% if group.name == 'Editor_Responsable' %}
+    <br>
+    <a href="{% url 'AccionCorrectiva-publicar' pk=accioncorrectiva.pk %}">Publicar esta acción correctiva.</a>          
+    {% endif %}
+  {% endfor %}
+  
+{% endblock %}

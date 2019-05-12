@@ -91,7 +91,7 @@ class AccionCorrectiva(models.Model):
     text = models.TextField(help_text=
     "Describir cómo se piensa corregir la acción que genera la NC,")
     publicado = models.BooleanField(default=False,help_text="Indica si la entrada está aceptada.")
-    fechalimite= models.DateTimeField()
+    fechalimite= models.DateTimeField(help_text="Ingresar la fecha en la cual debe estar implementada la AC \n con el siguiente formato: dd/mm/aaaa hh:mm:ss")
 
     def __str__(self):
         return 'Acción Correctiva: {0} {1}'.format(self.autor,self.nc)
@@ -102,8 +102,6 @@ class VerificaAC(models.Model):
     ac = models.ForeignKey(AccionCorrectiva, on_delete=models.CASCADE)
     created_date = models.DateTimeField(
             default=timezone.now)
-    text = models.TextField(help_text=
-    "Describir cómo se piensa corregir la acción que genera la NC,")
     publicado = models.BooleanField(default=False,help_text="Indica si la entrada está aceptada.")
     fechaVerif= models.DateTimeField()
     resultado=models.TextField()

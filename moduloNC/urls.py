@@ -17,6 +17,11 @@ urlpatterns = [
     path('AnalisisCausa_por_NC', views.analisiscausa_por_NC, name='analisiscausa_por_NC'),
     path('Analisis_publicar/<int:pk>/',views.AnalisisCausa_publicar,name='Analisis-publicar'),
     path('Analisis_edit/<int:pk>/',views.AnalisisCausa_edit,name='Analisis-edit'),
+    path('nuevaAccionCorrectiva/<int:pk>/', views.accioncorrectiva_new, name='nuevaAccionCorrectiva'),
+    path('AccionCorrectiva/<int:pk>/',views.AccionCorrectivaDetailView.as_view(),name='AccionCorrectiva-detail'),
+    path('AccionCorrectiva_por_NC', views.accioncorrectiva_por_NC, name='accioncorrectiva_por_NC'),
+    path('AccionCorrectiva_publicar/<int:pk>/',views.AccionCorrectiva_publicar,name='AccionCorrectiva-publicar'),
+    path('AccionCorrectiva_edit/<int:pk>/',views.AccionCorrectiva_edit,name='AccionCorrectiva-edit'),
 
 
 ]

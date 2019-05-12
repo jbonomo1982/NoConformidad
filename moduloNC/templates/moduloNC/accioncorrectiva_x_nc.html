@@ -1,0 +1,25 @@
+{% extends "moduloNC/base.html" %}
+
+{% block content %}
+    <h1>Lista de acciones correctivas para la nc {{nc}} </h1>
+
+    {% if ac %}
+    <ul>
+
+      {% for a in ac %}
+      <li>
+        <a href="{% url 'AcciónCorrectiva-detail' pk=a.pk %}">{{ a.pk }}</a>
+        
+        
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>No se encontró ninguna acción correctiva para la NC {{nc}}.</p>
+    {% endif %}  
+    
+    <h2>Crear nueva acción correctivas</h2>
+    <a href="{% url 'nuevaAccionCorrectiva' pk=nc %}">Abrir Acción Correctiva</a></li>
+
+{% endblock %}

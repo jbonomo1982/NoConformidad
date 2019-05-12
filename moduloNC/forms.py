@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import NC , AccionInm, AnalisisCausa
+from .models import NC , AccionInm, AnalisisCausa, AccionCorrectiva
 
 class NCForm(ModelForm):
 
@@ -28,6 +28,18 @@ class AnalisisForm(ModelForm):
         fields = ('descr',)
 
 class AnalisisFormEditor(ModelForm):
+
+    class Meta:
+        model = AnalisisCausa
+        fields = ('publicado',)
+
+class AccionCorrectivaForm(ModelForm):
+
+    class Meta:
+        model = AccionCorrectiva
+        fields = ('text','fechalimite',)
+
+class AccionCorrectivaFormEditor(ModelForm):
 
     class Meta:
         model = AnalisisCausa
