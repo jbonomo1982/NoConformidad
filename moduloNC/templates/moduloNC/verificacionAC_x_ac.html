@@ -1,0 +1,26 @@
+{% extends "moduloNC/base.html" %}
+
+{% block content %}
+    <h1>Lista de verificaciones de acciones correctivas para la AC {{ac.pk}} </h1>
+
+    {% if vac %}
+    <ul>
+
+      {% for a in vac %}
+      <li>
+        <a href="{% url 'VerificaAC-detail' pk=a.pk %}">{{ a.pk }}</a>
+        
+        
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>No se encontró ninguna verificacion para la acción correctiva  {{nc}}.</p>
+    {% endif %}  
+    
+    <h2>Crear nueva verificación de acción correctiva</h2>
+    <p>Recuerde que para crear una verificación de AC debe haber una AC publicada.</p>
+    <a href="{% url 'nuevaVerificacion' pk=ac.pk %}">Abrir Verificación Acción Correctiva</a></li>
+
+{% endblock %}

@@ -22,6 +22,10 @@ urlpatterns = [
     path('AccionCorrectiva_por_NC', views.accioncorrectiva_por_NC, name='accioncorrectiva_por_NC'),
     path('AccionCorrectiva_publicar/<int:pk>/',views.AccionCorrectiva_publicar,name='AccionCorrectiva-publicar'),
     path('AccionCorrectiva_edit/<int:pk>/',views.AccionCorrectiva_edit,name='AccionCorrectiva-edit'),
-
+    path('nuevaVerificacion/<int:pk>/', views.verificacionAC_new, name='nuevaVerificacion'),
+    path('Verificacion/<int:pk>/',views.VerificaACDetailView.as_view(),name='VerificaAC-detail'),
+    path('Verificacion_por_AC', views.verificacionAC_por_AC, name='verificacion_por_AC'),
+    path('Verificacion_publicar/<int:pk>/',views.verificacion_publicar,name='Verificacion-publicar'),
+    path('Verificacion_edit/<int:pk>/',views.verificacion_edit,name='Verificacion-edit'),
 
 ]

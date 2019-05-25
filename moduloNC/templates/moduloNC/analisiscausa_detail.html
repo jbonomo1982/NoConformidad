@@ -3,7 +3,7 @@
 {% block content %}
   <h1>Análisis de causa: {{ analisiscausa.pk }}</h1>
 
-  <p><strong>Autor:</strong> <p>{{ analisiscausa.autor }}</p> 
+  <p><strong>Autor:</strong> {{ analisiscausa.autor }}</p> 
   <p><strong>De la NC:</strong> {{ analisiscausa.nc }}</p>
   <div style="margin-left:20px;margin-top:20px">
     <h4>Desarrollo:</h4>
@@ -11,10 +11,10 @@
   </div>
 
   {% if analisiscausa.publicado%}
-    <p>Esta Acción Inmediata  está publicada</p>
+    <p>Este Análisis de Causa  está publicado</p>
   
   {% else %}
-    <p>Esta acción inmediata no está publicada.</p>
+    <p>Este Análisis de Causa no está publicado.</p>
   {% endif %}
   
 

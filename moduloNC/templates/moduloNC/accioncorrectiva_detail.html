@@ -1,7 +1,7 @@
 {% extends "moduloNC/base.html" %}
 
 {% block content %}
-  <h1>Análisis de causa: {{ accioncorrectiva.pk }}</h1>
+  <h1>Acción Correctiva: {{ accioncorrectiva.pk }}</h1>
 
   <p><strong>Autor:</strong> <p>{{ accioncorrectiva.autor }}</p> 
   <p><strong>De la NC:</strong> {{ accioncorrectiva.nc }}</p>
@@ -23,13 +23,17 @@
 
     
     <a href="{% url 'AccionCorrectiva-edit' pk=accioncorrectiva.pk %}">Editar este acción correctiva.</a>
-
+    <h2>Ver verificaciones de la AC</h2>
+    <a href="{% url 'verificacion_por_AC'%}?AC={{accioncorrectiva.pk}}">Listado de verificaciones.</a>
+    
   {% endif %}
 
   {% for group in user.groups.all %}
     {% if group.name == 'Editor_Responsable' %}
     <br>
-    <a href="{% url 'AccionCorrectiva-publicar' pk=accioncorrectiva.pk %}">Publicar esta acción correctiva.</a>          
+    <a href="{% url 'AccionCorrectiva-publicar' pk=accioncorrectiva.pk %}">Publicar esta acción correctiva.</a>
+    <br>
+    <a href="{% url 'nuevaVerificacion' pk=accioncorrectiva.pk %}">Verificar esta acción correctiva.</a>           
     {% endif %}
   {% endfor %}
   

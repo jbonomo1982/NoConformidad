@@ -1,9 +1,9 @@
 # Create your views here.
 
 from django.shortcuts import render
-from .models import NC, AccionInm, Contribuyente, AnalisisCausa,AccionCorrectiva
+from .models import NC, AccionInm, Contribuyente, AnalisisCausa,AccionCorrectiva, VerificaAC
 from django.views import generic
-from .forms import NCForm, AccionInmForm, AccionInmFormEditor, AnalisisForm, AnalisisFormEditor, AccionCorrectivaForm, AccionCorrectivaFormEditor
+from .forms import NCForm, AccionInmForm, AccionInmFormEditor, AnalisisForm, AnalisisFormEditor, AccionCorrectivaForm, AccionCorrectivaFormEditor, VerificaACForm, VerificaACFormEditor
 from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponse
 from django.utils import timezone
@@ -322,3 +322,106 @@ def AccionCorrectiva_edit(request, pk):
     else:
         form = AccionInmForm(initial={'text':post.text})
     return render(request, 'moduloNC/nuevaAccionCorrectiva.html', {'form': form})
+
+#Verificación AC
+
+class VerificaACDetailView(generic.DetailView):
+    model = VerificaAC
+
+
+def verificacionAC_new(request,pk):
+    #Se hace solo verificacion si hay una AC publicada y se hacen verificaciones solo sobre la misma.
+    ac = AccionCorrectiva.objects.get(pk=pk)
+    nc = ac.nc
+    print(nc.pk)
+    if request.method == "POST":
+        form = VerificaACForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            #Buscar como filtrar la AC que está publicada para la NC correspondiente.
+            post.nc = nc
+            post.ac = ac
+        
+            post.save()
+            return redirect('VerificaAC-detail', pk=post.pk)
+        else:
+            print("no es valido")
+    else:
+        
+        form = VerificaACForm()
+        
+    return render(request, 'moduloNC/nuevaVerificacionAC.html', {'form': form,'ac':ac})
+
+
+    
+def verificacionAC_por_AC(request):
+    #detalla la verificación de AC por  NC 
+    pk_ac = request.GET['AC']
+    ac = AccionCorrectiva.objects.get(pk=pk_ac)
+    vac = VerificaAC.objects.filter(ac=ac) 
+    
+    return render(request, 'moduloNC/verificacionAC_x_ac.html', {'vac':vac,'ac': ac})
+
+
+def verificacion_publicar(request, pk):
+    #Solo los usuarios editores pueden publicar.
+    post = get_object_or_404(VerificaAC, pk=pk)
+    usuario_req = request.user.username
+    
+    grupo = request.user.groups.filter(name='Editor_Responsable').exists()
+    if not grupo:
+        return HttpResponse("Tiene que tener un usuario con perfil de editor. " + str(usuario_req))
+    if request.method == "POST":
+        
+        if grupo:
+            formE = VerificaACFormEditor(request.POST,instance=post)
+            if formE.is_valid():
+                
+                post2 = formE.save(commit=False)
+                
+            
+                post2.save()
+                #Si se cambia el estado a publicado, tiene que cambiar todos los
+                #otros ingresos de AI de la misma NC a no publicado.
+                if post2.publicado == True:
+                    print("publicado")
+                    ac = post2.ac
+                    print(ac)
+                    otrasVAC = VerificaAC.objects.filter(ac = ac).exclude(pk=post2.pk)
+                    otrasVAC.update(publicado=False)
+
+                return redirect('VerificaAC-detail', pk=post2.pk)
+        
+    else:
+        form = VerificaACForm(instance=post)
+        formE = VerificaACFormEditor(instance=post)
+    return render(request, 'moduloNC/nuevaVerificacionAC.html', {'form': form,'formE':formE})
+
+def verificacion_edit(request, pk):
+    #Editar en realidad tiene que ser crear una nueva instancia sobre otra anterior
+    post = get_object_or_404(VerificaAC, pk=pk)
+    nc = post.nc
+    if request.method == "POST":
+        form = VerificaACForm(request.POST)
+        
+        if form.is_valid():
+            b= form.save(commit=False)
+            b.autor = request.user
+            b.nc = nc
+
+            if nc.autor != request.user:
+                if Contribuyente.objects.get(nc=nc):
+                    a = Contribuyente.objects.get(nc=nc)
+                    a.contribuyente.add(request.user)
+                    a.save()
+
+            
+            b.save()
+            return redirect('VerificaAC-detail', pk=b.pk)
+
+        
+    else:
+        form = AccionInmForm()
+    return render(request, 'moduloNC/nuevaVerificacionAC.html', {'form': form})
+
+
