@@ -1,0 +1,25 @@
+{% extends "moduloNC/base.html" %}
+
+{% block content %}
+    <h1>Lista de Archivos adjuntos de la No Conformidad {{nc}} </h1>
+
+    {% if ar %}
+    <ul>
+
+      {% for a in ar %}
+      <li>
+        <a href="{% url 'Archivo-detail' pk=a.pk %}">{{ a.pk }}</a>
+        
+        
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>No se encontró ningún Archivo adjunto para la NC {{nc}}.</p>
+    {% endif %}  
+    
+    <h2>Adjuntar nuevo Archivo</h2>
+    <a href="{% url 'nuevaArchivo' pk=nc %}">Adjuntar Archivo</a></li>
+
+{% endblock %}

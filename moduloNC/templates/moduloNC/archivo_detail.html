@@ -1,0 +1,31 @@
+{% extends "moduloNC/base.html" %}
+
+{% block content %}
+  <h1>Archivo Adjunto: {{ archivo.pk }}</h1>
+
+  <p><strong>Autor:</strong> {{ archivo.autor }}</p> 
+  <p><strong>De la NC:</strong> {{ archivo.nc }}</p>
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Descripción:</h4>
+    <p> {{ archivo.descr }}</p>  
+  </div>
+
+  {% if archivo.publicado%}
+    <p>Este Archivo  está publicado</p>
+  
+  {% else %}
+    <p>Este Archivo no está publicado.</p>
+  {% endif %}
+  
+
+
+  
+
+  {% for group in user.groups.all %}
+    {% if group.name == 'Editor_Responsable' %}
+    <br>
+    <a href="{% url 'Archivo-publicar' pk=archivo.pk %}">Publicar este Archivo</a>          
+    {% endif %}
+  {% endfor %}
+  
+{% endblock %}

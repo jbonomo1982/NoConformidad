@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import NC , AccionInm, AnalisisCausa, AccionCorrectiva, VerificaAC
+from .models import NC , AccionInm, AnalisisCausa, AccionCorrectiva, VerificaAC, Archivo
 
 class NCForm(ModelForm):
 
@@ -55,4 +55,16 @@ class VerificaACFormEditor(ModelForm):
 
     class Meta:
         model = VerificaAC
+        fields = ('publicado',)
+
+class ArchivoForm(ModelForm):
+
+    class Meta:
+        model = Archivo
+        fields = ('document','descr',)
+
+class ArchivoFormEditor(ModelForm):
+
+    class Meta:
+        model = Archivo
         fields = ('publicado',)

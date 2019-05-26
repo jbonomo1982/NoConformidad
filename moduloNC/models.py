@@ -111,8 +111,8 @@ class VerificaAC(models.Model):
         return 'Verificacion de NC: {0}, AC: {1}'.format(self.nc,self.ac)
 
 class Archivo(models.Model):
-    autor = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    nc = models.ForeignKey(NC, on_delete=models.CASCADE)
+    autor = models.ForeignKey('auth.User', on_delete=models.CASCADE, default=None)
+    nc = models.ForeignKey(NC, on_delete=models.CASCADE,default=None)
     created_date = models.DateTimeField(
             default=timezone.now)
     document = models.FileField(upload_to='documentos/')

@@ -23,8 +23,9 @@
       <li><a href="{% url 'accionInm_por_NC'%}?NC={{ nc.pk }}">acciones inmediatas (Ver crear y editar) </a></li>
   
       <li><a href="{% url 'analisiscausa_por_NC'%}?NC={{ nc.pk }}">análisis de causa (Ver crear y editar) </a></li>
-      <li><a href="{% url 'accioncorrectiva_por_NC'%}?NC={{ nc.pk }}">acción correctiva (Ver crear editar / Verificar) </a></li>
-      <li>archivos adjuntos</li>
+      
+      <li><a href="{% url 'archivo_por_NC'%}?NC={{ nc.pk }}">archivos adjuntos a la NC (Ver y agregar) </a></li>
+      
     </ul>
     {% endif %}
   
