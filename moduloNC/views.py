@@ -1,9 +1,9 @@
 # Create your views here.
 
 from django.shortcuts import render
-from .models import NC, AccionInm, Contribuyente, AnalisisCausa,AccionCorrectiva, VerificaAC, Archivo
+from .models import NC, AccionInm, Contribuyente, AnalisisCausa,AccionCorrectiva, VerificaAC, Archivo, CierreNC
 from django.views import generic
-from .forms import NCForm, AccionInmForm, AccionInmFormEditor, AnalisisForm, AnalisisFormEditor, AccionCorrectivaForm, AccionCorrectivaFormEditor, VerificaACForm, VerificaACFormEditor, ArchivoForm, ArchivoFormEditor
+from .forms import NCForm, AccionInmForm, AccionInmFormEditor, AnalisisForm, AnalisisFormEditor, AccionCorrectivaForm, AccionCorrectivaFormEditor, VerificaACForm, VerificaACFormEditor, ArchivoForm, ArchivoFormEditor, CierreNCForm, CierreNCFormEditor
 from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponse
 from django.utils import timezone
@@ -320,7 +320,7 @@ def AccionCorrectiva_edit(request, pk):
 
         
     else:
-        form = AccionInmForm(initial={'text':post.text})
+        form = AccionCorrectivaForm(initial={'text':post.text})
     return render(request, 'moduloNC/nuevaAccionCorrectiva.html', {'form': form})
 
 #Verificación AC
@@ -421,7 +421,7 @@ def verificacion_edit(request, pk):
 
         
     else:
-        form = AccionInmForm()
+        form = VerificaACForm()
     return render(request, 'moduloNC/nuevaVerificacionAC.html', {'form': form})
 
 
@@ -495,4 +495,124 @@ def Archivo_publicar(request, pk):
         formE = ArchivoFormEditor(instance=post)
     return render(request, 'moduloNC/nuevaArchivo.html', {'form': form,'formE':formE})
 
+
+def nc_info(request, pk):
+    #esta view es para ver lo publicado en de una NC
+    nc = get_object_or_404(NC, pk=pk)
+    #buscar la accion inmediata publicada
+    ai_de_nc = AccionInm.objects.filter(nc=nc).exclude(publicado=False)
+    ai = None
+    for a in ai_de_nc:
+        if a.publicado == True:
+            ai = a
+        else:
+            ai = None
+        
+    #buscar el analisis de causa publicado
+    ac_de_nc = AnalisisCausa.objects.filter(nc=nc).exclude(publicado=False)
+    ac =None 
+    for a in ac_de_nc:
+        if a.publicado == True:
+            ac = a
+        else:
+            ac = None
+    #buscar la accion correctiva publicada
+    aco_de_nc = AccionCorrectiva.objects.filter(nc=nc).exclude(publicado=False)
+    aco = None
+    for a in aco_de_nc:
+        if a.publicado == True:
+            aco = a
+        else:
+            aco = None
+    #buscar la verificacion  de la AC publicada
+    vac_de_ac = VerificaAC.objects.filter(ac = aco).exclude(publicado=False)
+    vac = None
+    for v in vac_de_ac:
+        if v.publicado == True:
+            vac = v
+        else:
+            vac = None
+
+    #buscar el cierre de la NC
+    cie_NC = CierreNC.objects.filter(nc=nc).exclude(aceptado=False)
+    cNC = None
+    for c in cie_NC:
+        if c.aceptado == True:
+            cNC = c
+
+    return render(request, 'moduloNC/nc_info.html', {'nc':nc,'ai':ai,'ac':ac,'aco':aco,'vac':vac, 'cNC':cNC })
+
+
+# Cierre de NC
+
+class CierreNCDetailView(generic.DetailView):
+    model = CierreNC
+
+def cierreNC_new(request,pk):
+    nc = NC.objects.get(pk=pk)
+    if request.method == "POST":
+        form = CierreNCForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.autor = request.user
+            if nc.autor != post.autor:
+                if Contribuyente.objects.get(nc=nc):
+                    a = Contribuyente.objects.get(nc=nc)
+                    a.contribuyente.add(request.user)
+                    a.save()
+                    
+            post.nc = nc
+            post.save()
+            return redirect('CierreNC-detail', pk=post.pk)
+    else:
+        
+        form = CierreNCForm()
+    return render(request, 'moduloNC/nuevaCierreNC.html', {'form': form,'nc':nc})
+
+
+    
+def cierreNC_por_NC(request):
+    #detalla la acc corr por  NC 
+    nc_requerida = request.GET['NC']
+    nc_buscada = NC.objects.get(pk=nc_requerida)
+    cNC = CierreNC.objects.filter(nc=nc_buscada)
+    return render(request, 'moduloNC/cierreNC_x_nc.html', {'cNC':cNC,'nc': nc_requerida})
+
+
+def cierreNC_publicar(request, pk):
+    #Solo los usuarios editores pueden publicar.
+    post = get_object_or_404(CierreNC, pk=pk)
+    usuario_req = request.user.username
+    usuario_Ai = post.autor
+    grupo = request.user.groups.filter(name='Editor_Responsable').exists()
+    if not grupo:
+        return HttpResponse("Tiene que tener un usuario con perfil de editor. " + str(usuario_req))
+    if request.method == "POST":
+        
+        if grupo:
+            formE = CierreNCFormEditor(request.POST,instance=post)
+            if formE.is_valid():
+                
+                post2 = formE.save(commit=False)
+                
+            
+                post2.save()
+                #Si se cambia el estado a publicado, tiene que cambiar todos los
+                #otros ingresos de Cierre de NC de la misma NC a no publicado.
+                if post2.aceptado == True:
+                    print("aceptado")
+                    nc = post2.nc
+                    print(nc)
+                    otrasAC = CierreNC.objects.filter(nc = nc).exclude(pk=post2.pk)
+                    otrasAC.update(aceptado=False)
+                    #Cambia el estado de la NC
+                    cierre = NC.objects.filter(pk = nc.pk).update(cerrada = True)
+                    
+
+                return redirect('CierreNC-detail', pk=post2.pk)
+        
+    else:
+        form = CierreNCForm(instance=post)
+        formE = CierreNCFormEditor(instance=post)
+    return render(request, 'moduloNC/nuevaCierreNC.html', {'form': form,'formE':formE})
 

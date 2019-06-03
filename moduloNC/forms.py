@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from .models import NC , AccionInm, AnalisisCausa, AccionCorrectiva, VerificaAC, Archivo
+from .models import NC , AccionInm, AnalisisCausa, AccionCorrectiva, VerificaAC, Archivo, CierreNC
 
 class NCForm(ModelForm):
 
@@ -68,3 +68,15 @@ class ArchivoFormEditor(ModelForm):
     class Meta:
         model = Archivo
         fields = ('publicado',)
+
+class CierreNCForm(ModelForm):
+
+    class Meta:
+        model = CierreNC
+        fields = ('observacion',)
+
+class CierreNCFormEditor(ModelForm):
+
+    class Meta:
+        model = CierreNC
+        fields = ('aceptado',)

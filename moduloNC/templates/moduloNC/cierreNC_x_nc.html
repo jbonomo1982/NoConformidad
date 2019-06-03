@@ -1,0 +1,25 @@
+{% extends "moduloNC/base.html" %}
+
+{% block content %}
+    <h1>Lista de cierre de la nc {{nc}} </h1>
+
+    {% if cNC %}
+    <ul>
+
+      {% for a in cNC %}
+      <li>
+        <a href="{% url 'CierreNC-detail' pk=a.pk %}">{{ a.pk }}</a>
+        
+        
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>No se encontró ningún cierre para la NC {{nc}}.</p>
+    {% endif %}  
+    
+    <h2>Crear nuevo Cierre</h2>
+    <a href="{% url 'nuevaCierreNC' pk=nc %}">Abrir Cierre de NC</a></li>
+
+{% endblock %}

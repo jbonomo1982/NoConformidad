@@ -1,0 +1,49 @@
+{% extends "moduloNC/base.html" %}
+
+{% block content %}
+  
+  
+    <h1>No Conformidad: {{ nc.codigo }}</h1>
+
+    <p><strong>Autor:</strong> {{ nc.autor }}</p> 
+    <p><strong>Título:</strong> {{ nc.titulo }}</p>
+    <p><strong>Sector:</strong> {{ nc.sector }}</p> 
+    <p><strong>Fecha de apertura:</strong> {{ nc.fechaApertura }}</p> 
+    {% if nc.cerrada %}
+        <p><strong>Estado de la NC:</strong> Cerrada</p>
+
+        {% else %}
+            <p><strong>Estado de la NC:</strong> Abierta</p>
+    
+    {% endif %}
+     
+    <div style="margin-left:20px;margin-top:20px">
+      <h4>Descripción de la NC:</h4>
+      <p> {{ nc.descripcion }}</p>  
+    </div>
+
+    <h2>Acción Inmediata:</h2>
+    <br>
+    <p><strong>Descripción:</strong>{{ ai.text }} </p>
+
+    <h2>Análisis Causa:</h2>
+    <p><strong>Descripción:</strong>{{ ac.descr }} </p>
+
+    <h2>Acción Correctiva:</h2>
+    <p><strong>Descripción:</strong>{{ aco.text }} </p>
+    <p><strong>Fecha límite:</strong> {{aco.fechalimite}}</p>
+
+    <h2>Verificación Acción Correctiva:</h2>
+    <p><strong>Fecha:</strong> {{vac.fechaVerif}}</p>
+    <p><strong>Método:</strong> {{vac.metodoVerif}}</p>
+    <p><strong>Resultado:</strong> {{vac.resultado}}</p>
+
+    <h2>Cierre de NC</h2>
+    <p><strong>Fecha:</strong> {{cNC.fechaCierre}}</p>
+    
+
+  
+    
+  
+  
+{% endblock %}

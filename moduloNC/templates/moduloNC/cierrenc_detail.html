@@ -1,0 +1,30 @@
+{% extends "moduloNC/base.html" %}
+
+{% block content %}
+  <h1>Cierre de No Conformidad: {{ cierrenc.pk }}</h1>
+
+  <p><strong>Autor:</strong> <p>{{ cierrenc.autor }}</p> 
+  <p><strong>De la NC:</strong> {{ cierrenc.nc }}</p>
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Observaciones:</h4>
+    <p> {{ cierrenc.observacion }}</p>  
+  </div>
+
+  {% if cierrenc.aceptado %}
+    <p>Este Cierre está aceptado </p>
+  
+  {% else %}
+    <p>Este cierre no está aceptado.</p>
+  {% endif %}
+  
+
+
+
+  {% for group in user.groups.all %}
+    {% if group.name == 'Editor_Responsable' %}
+    <br>
+    <a href="{% url 'cierreNC-publicar' pk=cierrenc.pk %}">Aceptar este cierre de NC.</a>         
+    {% endif %}
+  {% endfor %}
+  
+{% endblock %}

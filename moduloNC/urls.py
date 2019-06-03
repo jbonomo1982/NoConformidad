@@ -7,6 +7,7 @@ urlpatterns = [
     path('nc/', views.NCListView.as_view(), name='nc'),
     path('nc/<int:pk>/',views.NCDetailView.as_view(),name='nc-detail'),
     path('nuevanc', views.nc_new, name='nuevanc'),
+    path('nc_informe/<int:pk>/',views.nc_info,name='nc-info'),
     path('nuevaAccionInm/<int:pk>/', views.AccionInm_new, name='nuevaAccionInm'),
     path('AccionInm/<int:pk>/',views.AccionInmDetailView.as_view(),name='AccionInm-detail'),
     path('accionInm_por_NC', views.accionInm_por_NC, name='accionInm_por_NC'),
@@ -31,6 +32,9 @@ urlpatterns = [
     path('nuevaArchivo/<int:pk>/', views.archivo_new, name='nuevaArchivo'),
     path('Archivo_por_NC', views.archivo_por_NC, name='archivo_por_NC'),
     path('Archivo_publicar/<int:pk>/',views.Archivo_publicar,name='Archivo-publicar'),
-    
+    path('nuevaCierreNC/<int:pk>/', views.cierreNC_new, name='nuevaCierreNC'),
+    path('cerrarNC/<int:pk>/',views.CierreNCDetailView.as_view(),name='CierreNC-detail'),
+    path('cierreNC_por_NC', views.cierreNC_por_NC, name='CierreNC_por_NC'),
+    path('cierreNC_publicar/<int:pk>/',views.cierreNC_publicar,name='cierreNC-publicar'),    
 
 ]
