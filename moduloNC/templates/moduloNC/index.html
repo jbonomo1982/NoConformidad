@@ -1,15 +1,14 @@
 {% extends "moduloNC/base.html" %}
 
 {% block content %}
-<h1>MÓDULO NO CONFORMIDAD</h1>
-
-  <p>Bienvenido al <em>Módulo de No Conformidad</em>, desarrollado en Django</p>
- 
-<h2>Tenemos los siguientes registros:</h2>
+<div class="jumbotron text-center">
+  <h1>Módulo de No Conformidad</h1>
+  <p>Versión Beta</p> 
+</div>
 
   <ul>
-    <li><strong>No Conformidades creadas:</strong> {{ nc }}</li>
-    <li><strong>No Conformidades cerradas:</strong> {{ nc_fin }}</li>
+    <li><strong>No Conformidades creadas:</strong> <span class ="badge">{{ nc }} </span></li>
+    <li><strong>No Conformidades cerradas:</strong> <span class ="badge"> {{ nc_fin }} </span></li>
   </ul>
 
 {% endblock %}

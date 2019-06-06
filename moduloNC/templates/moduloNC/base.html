@@ -21,10 +21,10 @@
     <div class="row">
       <div class="col-sm-2">
     {% block sidebar %}
-      <ul class="sidebar-nav">
-        <li><a href="{% url 'index' %}">Home</a></li>
-        <li><a href="{% url 'nc' %}">Listado de NC</a></li>
-        <li><a href="{% url 'nuevanc' %}">Abrir NC</a></li>
+      <ul class="nav nav-pills nav stacked" role="tablist">
+        <li class= "active"><a href="{% url 'index' %}">Home <span class= "glyphicon glyphicon-home"></span></a></li>
+        <li class= "active" ><a href="{% url 'nc' %}" >Listado de NC <span class= "glyphicon glyphicon-list-alt"></span></a></li>
+        <li class= "active"><a href="{% url 'nuevanc' %}">Abrir NC <span class= "glyphicon glyphicon-plus"></span></a></li>
         {% if user.is_authenticated %}
           <li>User: {{ user.get_username }}</li>
           <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>   

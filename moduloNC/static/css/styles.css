@@ -8,17 +8,12 @@
     display: none;
 }
 
-#wrapper{ 
-    background: cornflowerblue;
-}
-.derecha {
-    padding-top: 20px;
-    margin-left: 15%;
-    background: aquamarine;
-}
 
-.izquierda {
+.nav-pills {
+    margin-top: 20px;
+    width: 100%
+}
+.nav-pills > li {
     float: left;
-    background: lightblue;
-    
+    width: 100%;
 }
