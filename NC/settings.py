@@ -25,7 +25,7 @@ SECRET_KEY = '91+*s*po$n3sv@h$gk5a#mu)kqvl6t3a2f_@1352qbrmp1l99q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['jbonomo1982.pythonanywhere.com']
 
 
 # Application definition
@@ -38,14 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'moduloNC',
-    'threadedcomments',
     'django_comments',
     'django.contrib.sites',
-    
+
 ]
 SITE_ID = 1
 
-COMMENTS_APP = 'threadedcomments'
+#COMMENTS_APP = 'threadedcomments'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -129,3 +128,5 @@ STATIC_URL = '/static/'
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")

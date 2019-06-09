@@ -29,7 +29,7 @@ class NC(models.Model):
 
 
     def __str__(self):
-        return '{0} {1}'.format(self.titulo,self.codigo)
+        return '{0} {1}'.format(self.titulo,self.pk)
 
 class Contribuyente(models.Model):
     contribuyente = models.ManyToManyField('auth.User')
@@ -52,7 +52,7 @@ class CierreNC(models.Model):
 
     def __str__(self):
         return 'Cierre de NC: {0}: {1}--ESTADO: {2}'.format(self.nc,self.pk,self.aceptado)
-        
+
 
 class AnalisisCausa(models.Model):
     autor = models.ForeignKey('auth.User', on_delete=models.CASCADE)
@@ -75,9 +75,8 @@ class AccionInm(models.Model):
     text = models.TextField(help_text=
     "Describir cómo se trato corregir la acción que genera la NC, en una prímera instancia")
     publicado = models.BooleanField(default=False,help_text="Indica si la entrada está aceptada.")
-    fecha_publicado = models.DateTimeField(blank=True,null=True)
-    def despublicar(self):
-        self.publicado = False
+
+
 
 
     def __str__(self):

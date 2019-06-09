@@ -28,8 +28,6 @@ def nc_new(request):
             post = form.save(commit=False)
             post.autor = request.user
             post.save()
-            c = Contribuyente(nc=NC.objects.get(pk = post.pk))
-            c.save()
             return redirect('nc-detail', pk=post.pk)
     else:
         form = NCForm()
@@ -47,14 +45,14 @@ def AccionInm_new(request,pk):
                     a = Contribuyente.objects.get(nc=nc)
                     a.contribuyente.add(request.user)
                     a.save()
-                    
+
             post.nc = nc
             post.save()
-            return redirect('AnalisisCausa-detail', pk=post.pk)
+            return redirect('AccionInm-detail', pk=post.pk)
     else:
-        
+
         form = AccionInmForm()
-    return render(request, 'moduloNC/nuevaAnalisis.html', {'form': form,'nc':nc})
+    return render(request, 'moduloNC/nueva_AccInm.html', {'form': form,'nc':nc})
 
 def AccionInm_edit(request, pk):
     #Editar en realidad tiene que ser crear una nueva instancia sobre otra anterior
@@ -62,7 +60,7 @@ def AccionInm_edit(request, pk):
     nc = post.nc
     if request.method == "POST":
         form = AccionInmForm(request.POST)
-        
+
         if form.is_valid():
             b= form.save(commit=False)
             b.autor = request.user
@@ -78,7 +76,7 @@ def AccionInm_edit(request, pk):
             b.save()
             return redirect('AccionInm-detail', pk=b.pk)
 
-        
+
     else:
         form = AccionInmForm(initial={'text':post.text})
     return render(request, 'moduloNC/nueva_AccInm.html', {'form': form})
@@ -92,14 +90,14 @@ def AccionInm_publicar(request, pk):
     if not grupo:
         return HttpResponse("Tiene que tener un usuario con perfil de editor. " + str(usuario_req))
     if request.method == "POST":
-        
+
         if grupo:
             formE = AccionInmFormEditor(request.POST,instance=post)
             if formE.is_valid():
-                
+
                 post2 = formE.save(commit=False)
-                
-            
+
+
                 post2.save()
                 #Si se cambia el estado a publicado, tiene que cambiar todos los
                 #otros ingresos de AI de la misma NC a no publicado.
@@ -111,7 +109,7 @@ def AccionInm_publicar(request, pk):
                     otrasAI.update(publicado=False)
 
                 return redirect('AccionInm-detail', pk=post2.pk)
-        
+
     else:
         form = AccionInmForm(instance=post)
         formE = AccionInmFormEditor(instance=post)
@@ -123,7 +121,7 @@ class AccionInmDetailView(generic.DetailView):
 
 
 def accionInm_por_NC(request):
-    #detalla las acc. inm por la NC 
+    #detalla las acc. inm por la NC
     nc_requerida = request.GET['NC']
     nc_buscada = NC.objects.get(pk=nc_requerida)
     acc = AccionInm.objects.filter(nc=nc_buscada)
@@ -145,19 +143,19 @@ def analisiscausa_new(request,pk):
                     a = Contribuyente.objects.get(nc=nc)
                     a.contribuyente.add(request.user)
                     a.save()
-                    
+
             post.nc = nc
             post.save()
             return redirect('AnalisisCausa-detail', pk=post.pk)
     else:
-        
+
         form = AnalisisForm()
     return render(request, 'moduloNC/nuevaAnalisis.html', {'form': form,'nc':nc})
 
 
-    
+
 def analisiscausa_por_NC(request):
-    #detalla los analisis de causa por  NC 
+    #detalla los analisis de causa por  NC
     nc_requerida = request.GET['NC']
     nc_buscada = NC.objects.get(pk=nc_requerida)
     ac = AnalisisCausa.objects.filter(nc=nc_buscada)
@@ -173,14 +171,14 @@ def AnalisisCausa_publicar(request, pk):
     if not grupo:
         return HttpResponse("Tiene que tener un usuario con perfil de editor. " + str(usuario_req))
     if request.method == "POST":
-        
+
         if grupo:
             formE = AnalisisFormEditor(request.POST,instance=post)
             if formE.is_valid():
-                
+
                 post2 = formE.save(commit=False)
-                
-            
+
+
                 post2.save()
                 #Si se cambia el estado a publicado, tiene que cambiar todos los
                 #otros ingresos de AI de la misma NC a no publicado.
@@ -192,7 +190,7 @@ def AnalisisCausa_publicar(request, pk):
                     otrasAC.update(publicado=False)
 
                 return redirect('AnalisisCausa-detail', pk=post2.pk)
-        
+
     else:
         form = AnalisisForm(instance=post)
         formE = AnalisisFormEditor(instance=post)
@@ -204,7 +202,7 @@ def AnalisisCausa_edit(request, pk):
     nc = post.nc
     if request.method == "POST":
         form = AnalisisForm(request.POST)
-        
+
         if form.is_valid():
             b= form.save(commit=False)
             b.autor = request.user
@@ -216,11 +214,11 @@ def AnalisisCausa_edit(request, pk):
                     a.contribuyente.add(request.user)
                     a.save()
 
-            
+
             b.save()
             return redirect('AnalisisCausa-detail', pk=b.pk)
 
-        
+
     else:
         form = AccionInmForm(initial={'descr':post.descr})
     return render(request, 'moduloNC/nuevaAnalisis.html', {'form': form})
@@ -243,19 +241,19 @@ def accioncorrectiva_new(request,pk):
                     a = Contribuyente.objects.get(nc=nc)
                     a.contribuyente.add(request.user)
                     a.save()
-                    
+
             post.nc = nc
             post.save()
             return redirect('AccionCorrectiva-detail', pk=post.pk)
     else:
-        
+
         form = AccionCorrectivaForm()
     return render(request, 'moduloNC/nuevaAccionCorrectiva.html', {'form': form,'nc':nc})
 
 
-    
+
 def accioncorrectiva_por_NC(request):
-    #detalla la acc corr por  NC 
+    #detalla la acc corr por  NC
     nc_requerida = request.GET['NC']
     nc_buscada = NC.objects.get(pk=nc_requerida)
     ac = AccionCorrectiva.objects.filter(nc=nc_buscada)
@@ -271,14 +269,14 @@ def AccionCorrectiva_publicar(request, pk):
     if not grupo:
         return HttpResponse("Tiene que tener un usuario con perfil de editor. " + str(usuario_req))
     if request.method == "POST":
-        
+
         if grupo:
             formE = AccionCorrectivaFormEditor(request.POST,instance=post)
             if formE.is_valid():
-                
+
                 post2 = formE.save(commit=False)
-                
-            
+
+
                 post2.save()
                 #Si se cambia el estado a publicado, tiene que cambiar todos los
                 #otros ingresos de AI de la misma NC a no publicado.
@@ -290,7 +288,7 @@ def AccionCorrectiva_publicar(request, pk):
                     otrasAC.update(publicado=False)
 
                 return redirect('AccionCorrectiva-detail', pk=post2.pk)
-        
+
     else:
         form = AccionCorrectivaForm(instance=post)
         formE = AccionCorrectivaFormEditor(instance=post)
@@ -302,7 +300,7 @@ def AccionCorrectiva_edit(request, pk):
     nc = post.nc
     if request.method == "POST":
         form = AccionCorrectivaForm(request.POST)
-        
+
         if form.is_valid():
             b= form.save(commit=False)
             b.autor = request.user
@@ -314,11 +312,11 @@ def AccionCorrectiva_edit(request, pk):
                     a.contribuyente.add(request.user)
                     a.save()
 
-            
+
             b.save()
             return redirect('AccionCorrectiva-detail', pk=b.pk)
 
-        
+
     else:
         form = AccionCorrectivaForm(initial={'text':post.text})
     return render(request, 'moduloNC/nuevaAccionCorrectiva.html', {'form': form})
@@ -341,25 +339,25 @@ def verificacionAC_new(request,pk):
             #Buscar como filtrar la AC que está publicada para la NC correspondiente.
             post.nc = nc
             post.ac = ac
-        
+
             post.save()
             return redirect('VerificaAC-detail', pk=post.pk)
         else:
             print("no es valido")
     else:
-        
+
         form = VerificaACForm()
-        
+
     return render(request, 'moduloNC/nuevaVerificacionAC.html', {'form': form,'ac':ac})
 
 
-    
+
 def verificacionAC_por_AC(request):
-    #detalla la verificación de AC por  NC 
+    #detalla la verificación de AC por  NC
     pk_ac = request.GET['AC']
     ac = AccionCorrectiva.objects.get(pk=pk_ac)
-    vac = VerificaAC.objects.filter(ac=ac) 
-    
+    vac = VerificaAC.objects.filter(ac=ac)
+
     return render(request, 'moduloNC/verificacionAC_x_ac.html', {'vac':vac,'ac': ac})
 
 
@@ -367,19 +365,19 @@ def verificacion_publicar(request, pk):
     #Solo los usuarios editores pueden publicar.
     post = get_object_or_404(VerificaAC, pk=pk)
     usuario_req = request.user.username
-    
+
     grupo = request.user.groups.filter(name='Editor_Responsable').exists()
     if not grupo:
         return HttpResponse("Tiene que tener un usuario con perfil de editor. " + str(usuario_req))
     if request.method == "POST":
-        
+
         if grupo:
             formE = VerificaACFormEditor(request.POST,instance=post)
             if formE.is_valid():
-                
+
                 post2 = formE.save(commit=False)
-                
-            
+
+
                 post2.save()
                 #Si se cambia el estado a publicado, tiene que cambiar todos los
                 #otros ingresos de AI de la misma NC a no publicado.
@@ -391,7 +389,7 @@ def verificacion_publicar(request, pk):
                     otrasVAC.update(publicado=False)
 
                 return redirect('VerificaAC-detail', pk=post2.pk)
-        
+
     else:
         form = VerificaACForm(instance=post)
         formE = VerificaACFormEditor(instance=post)
@@ -403,7 +401,7 @@ def verificacion_edit(request, pk):
     nc = post.nc
     if request.method == "POST":
         form = VerificaACForm(request.POST)
-        
+
         if form.is_valid():
             b= form.save(commit=False)
             b.autor = request.user
@@ -415,11 +413,11 @@ def verificacion_edit(request, pk):
                     a.contribuyente.add(request.user)
                     a.save()
 
-            
+
             b.save()
             return redirect('VerificaAC-detail', pk=b.pk)
 
-        
+
     else:
         form = VerificaACForm()
     return render(request, 'moduloNC/nuevaVerificacionAC.html', {'form': form})
@@ -443,19 +441,19 @@ def archivo_new(request,pk):
                     a = Contribuyente.objects.get(nc=nc)
                     a.contribuyente.add(request.user)
                     a.save()
-                    
+
             post.nc = nc
             post.save()
             return redirect('Archivo-detail', pk=post.pk)
     else:
-        
+
         form = ArchivoForm()
     return render(request, 'moduloNC/nuevaArchivo.html', {'form': form,'nc':nc})
 
 
-    
+
 def archivo_por_NC(request):
-    #detalla la archivos por  NC 
+    #detalla la archivos por  NC
     nc_requerida = request.GET['NC']
     nc_buscada = NC.objects.get(pk=nc_requerida)
     ar = Archivo.objects.filter(nc=nc_buscada)
@@ -470,14 +468,14 @@ def Archivo_publicar(request, pk):
     if not grupo:
         return HttpResponse("Tiene que tener un usuario con perfil de editor. " + str(usuario_req))
     if request.method == "POST":
-        
+
         if grupo:
             formE = ArchivoFormEditor(request.POST,instance=post)
             if formE.is_valid():
-                
+
                 post2 = formE.save(commit=False)
-                
-            
+
+
                 post2.save()
                 #Si se cambia el estado a publicado, tiene que cambiar todos los
                 #otros ingresos de AI de la misma NC a no publicado.
@@ -489,7 +487,7 @@ def Archivo_publicar(request, pk):
                     otrasAC.update(publicado=False)
 
                 return redirect('Archivo-detail', pk=post2.pk)
-        
+
     else:
         form = ArchivoForm(instance=post)
         formE = ArchivoFormEditor(instance=post)
@@ -507,10 +505,10 @@ def nc_info(request, pk):
             ai = a
         else:
             ai = None
-        
+
     #buscar el analisis de causa publicado
     ac_de_nc = AnalisisCausa.objects.filter(nc=nc).exclude(publicado=False)
-    ac =None 
+    ac =None
     for a in ac_de_nc:
         if a.publicado == True:
             ac = a
@@ -560,19 +558,19 @@ def cierreNC_new(request,pk):
                     a = Contribuyente.objects.get(nc=nc)
                     a.contribuyente.add(request.user)
                     a.save()
-                    
+
             post.nc = nc
             post.save()
             return redirect('CierreNC-detail', pk=post.pk)
     else:
-        
+
         form = CierreNCForm()
     return render(request, 'moduloNC/nuevaCierreNC.html', {'form': form,'nc':nc})
 
 
-    
+
 def cierreNC_por_NC(request):
-    #detalla la acc corr por  NC 
+    #detalla la acc corr por  NC
     nc_requerida = request.GET['NC']
     nc_buscada = NC.objects.get(pk=nc_requerida)
     cNC = CierreNC.objects.filter(nc=nc_buscada)
@@ -588,14 +586,14 @@ def cierreNC_publicar(request, pk):
     if not grupo:
         return HttpResponse("Tiene que tener un usuario con perfil de editor. " + str(usuario_req))
     if request.method == "POST":
-        
+
         if grupo:
             formE = CierreNCFormEditor(request.POST,instance=post)
             if formE.is_valid():
-                
+
                 post2 = formE.save(commit=False)
-                
-            
+
+
                 post2.save()
                 #Si se cambia el estado a publicado, tiene que cambiar todos los
                 #otros ingresos de Cierre de NC de la misma NC a no publicado.
@@ -607,10 +605,10 @@ def cierreNC_publicar(request, pk):
                     otrasAC.update(aceptado=False)
                     #Cambia el estado de la NC
                     cierre = NC.objects.filter(pk = nc.pk).update(cerrada = True)
-                    
+
 
                 return redirect('CierreNC-detail', pk=post2.pk)
-        
+
     else:
         form = CierreNCForm(instance=post)
         formE = CierreNCFormEditor(instance=post)
