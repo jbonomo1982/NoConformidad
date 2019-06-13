@@ -3,25 +3,25 @@
 {% block content %}
   <h1>Verificación de AC: {{ verificaac.pk }}</h1>
 
-  <p><strong>Encargado:</strong> <p>{{ verificaac.encargado }}</p> 
+  <p><strong>Encargado:</strong> <p>{{ verificaac.encargado }}</p>
   <p><strong>De la NC:</strong> {{ verificaac.nc }}</p>
   <div style="margin-left:20px;margin-top:20px">
     <h4>Metodo Verificación:</h4>
-    <p> {{ verificaac.metodoVerif }}</p>  
+    <p> {{ verificaac.metodoVerif }}</p>
   </div>
 
   {% if verificaac.publicado%}
-    <p>Esta Verificación de Acción Inmediata  está publicada</p>
-  
+    <p>Esta Verificación de Acción correctiva  está publicada</p>
+
   {% else %}
-    <p>Esta verificación de acción inmediata no está publicada.</p>
+    <p>Esta verificación de acción correctiva no está publicada.</p>
   {% endif %}
-  
+
 
 
   {% if user.is_authenticated %}
 
-    
+
     <a href="{% url 'Verificacion-edit' pk=verificaac.pk %}">Editar esta verificacion de AC.</a>
 
   {% endif %}
@@ -29,8 +29,10 @@
   {% for group in user.groups.all %}
     {% if group.name == 'Editor_Responsable' %}
     <br>
-    <a href="{% url 'Verificacion-publicar' pk=verificaac.pk %}">Publicar esta verificación AC.</a>          
+    <a href="{% url 'Verificacion-publicar' pk=verificaac.pk %}">Publicar esta verificación AC.</a>
     {% endif %}
   {% endfor %}
-  
+  <br>
+  <a href="{% url 'nc-detail' pk=verificaac.nc.pk %}">Ir a No Conformidad</a>
+
 {% endblock %}

@@ -9,17 +9,20 @@
       {% for a in ai %}
       <li>
         <a href="{% url 'AccionInm-detail' pk=a.pk %}">{{ a.pk }}</a>
-        
-        
+
+
       </li>
       {% endfor %}
 
     </ul>
     {% else %}
       <p>No se encontró ninguna acción inmediata para la NC {{nc}}.</p>
-    {% endif %}  
-    
+    {% endif %}
+
     <h2>Crear nueva Acción Inmediata</h2>
-    <a href="{% url 'nuevaAccionInm' pk=nc %}">Abrir Acc. Inmediata</a></li>
+    <a href="{% url 'nuevaAccionInm' pk=nc.pk %}">Abrir Acc. Inmediata</a></li>
+
+    <br>
+    <a href="{% url 'nc-detail' pk=nc.pk %}">Ir a No Conformidad</a>
 
 {% endblock %}

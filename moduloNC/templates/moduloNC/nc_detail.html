@@ -5,45 +5,45 @@
 {% block content %}
   <div class="conteiner-fluid">
   <div class='row'>
-    <div class="col-sm-9 col-md-9" style="background-color:rgb(230, 248, 242);">
+    <div class="col-sm-9 col-md-9" >
       <h1 class="bg-primary">No Conformidad: {{ nc.codigo }}</h1>
 
-      <p><strong>Autor:</strong>  {{ nc.autor }}</p> 
+      <p><strong>Autor:</strong>  {{ nc.autor }}</p>
       <p><strong>Título:</strong> {{ nc.titulo }}</p>
-      <p><strong>Sector:</strong> {{ nc.sector }}</p> 
-      <p><strong>Fecha de apertura:</strong> {{ nc.fechaApertura }}</p> 
-      <p><strong>Cerrado:</strong> {{ nc.cerrada }}</p>  
+      <p><strong>Sector:</strong> {{ nc.sector }}</p>
+      <p><strong>Fecha de apertura:</strong> {{ nc.fechaApertura }}</p>
+      <p><strong>Cerrado:</strong> {{ nc.cerrada }}</p>
       <h4><strong>descripcion de la NC:</strong></h4>
-      <p class="bg-info"> {{ nc.descripcion }}</p>  
-      
-    
+      <p class="bg-info"> {{ nc.descripcion }}</p>
 
-  
+
+
+
       {% if user.is_authenticated %}
       <h2 class="bg-success">Trabajar sobre la NC:</h2>
       <ul>
         <li><a href="{% url 'accionInm_por_NC'%}?NC={{ nc.pk }}">acciones inmediatas (Ver crear y editar) </a></li>
-  
+
         <li><a href="{% url 'analisiscausa_por_NC'%}?NC={{ nc.pk }}">análisis de causa (Ver crear y editar) </a></li>
 
         <li><a href="{% url 'accioncorrectiva_por_NC'%}?NC={{ nc.pk }}">acción correctiva (Ver crear y editar) </a></li>
-      
+
         <li><a href="{% url 'archivo_por_NC'%}?NC={{ nc.pk }}">archivos adjuntos a la NC (Ver y agregar) </a></li>
-      
+
       </ul>
       {% endif %}
 
       {% for group in user.groups.all %}
         {% if group.name == 'Editor_Responsable' %}
         <br>
-        <a href="{% url 'nuevaCierreNC' pk=nc.pk %}">Cerrar esta No Conformidad</a>         
+        <a href="{% url 'nuevaCierreNC' pk=nc.pk %}">Cerrar esta No Conformidad</a>
         {% endif %}
       {% endfor %}
-  
-  
+
+
     <h2 class="bg-success">Informe de la No Conformidad</h2>
     <a href="{% url 'nc-info' pk=nc.pk %}">Ver informe de la NC </a>
-  
+
     {% if user.is_authenticated %}
       <h2 class="bg-success">Ingresar comentario</h2>
       {% get_comment_form for nc as form %}
@@ -63,14 +63,14 @@
       <p>Por favor loguearse para dejar un comentario.</p>
     {% endif %}
   </div>
-  
+
 
   <div id = izquierda class="col-sm-9 col-md-3" style="background-color:rgb(190, 95, 253);">
     <h2>Comentarios:</h2>
     <div class="panel panel-default">
     {% render_comment_list for nc %}
     </div>
-  </div>  
-  </div>  
-  
+  </div>
+  </div>
+
 {% endblock %}

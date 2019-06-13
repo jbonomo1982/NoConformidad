@@ -1,27 +1,27 @@
 {% extends "moduloNC/base.html" %}
 
 {% block content %}
-  <h1>Acción Inmediata: {{ accioninm.pk }}</h1>
+  <h1 class="bg-primary">Acción Inmediata: {{ accioninm.pk }}</h1>
 
-  <p><strong>Autor:</strong> <p>{{ accioninm.autor }}</p> 
+  <p><strong>Autor:</strong> {{ accioninm.autor }}</p>
   <p><strong>De la NC:</strong> {{ accioninm.nc }}</p>
   <div style="margin-left:20px;margin-top:20px">
     <h4>Desarrollo:</h4>
-    <p> {{ accioninm.text }}</p>  
+    <p> {{ accioninm.text }}</p>
   </div>
 
   {% if accioninm.publicado%}
     <p>Esta Acción Inmediata  está publicada</p>
-  
+
   {% else %}
     <p>Esta acción inmediata no está publicada.</p>
   {% endif %}
-  
+
 
 
   {% if user.is_authenticated %}
 
-    
+
     <a href="{% url 'AccionInm-edit' pk=accioninm.pk %}">Editar esta Acción Inmediata</a>
 
   {% endif %}
@@ -29,8 +29,9 @@
   {% for group in user.groups.all %}
     {% if group.name == 'Editor_Responsable' %}
     <br>
-    <a href="{% url 'AccionInm-publicar' pk=accioninm.pk %}">Publicar esta Acción Inmediata</a>          
+    <a href="{% url 'AccionInm-publicar' pk=accioninm.pk %}">Publicar esta Acción Inmediata</a>
     {% endif %}
   {% endfor %}
-  
+  <br>
+  <a href="{% url 'nc-detail' pk=accioninm.nc.pk %}">Ir a No Conformidad</a>
 {% endblock %}

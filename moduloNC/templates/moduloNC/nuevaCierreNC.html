@@ -2,7 +2,7 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-        <h1>Cierre de la NC {{nc.pk}}</h1>
+        <h1>Cierre de la NC {{nc}}</h1>
         <form method="POST" class="CierreNCForm">{% csrf_token %}
             {{ form.as_p }}
             {% for group in user.groups.all %}

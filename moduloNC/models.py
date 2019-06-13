@@ -29,9 +29,10 @@ class NC(models.Model):
 
 
     def __str__(self):
-        return '{0} {1}'.format(self.titulo,self.pk)
+        return 'NC {0}'.format(self.codigo)
 
 class Contribuyente(models.Model):
+    # Arreglar este modelo!!
     contribuyente = models.ManyToManyField('auth.User')
     nc = models.OneToOneField(NC, on_delete=models.CASCADE)
     def __str__(self):

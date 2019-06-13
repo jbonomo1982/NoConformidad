@@ -40,12 +40,7 @@ def AccionInm_new(request,pk):
         if form.is_valid():
             post = form.save(commit=False)
             post.autor = request.user
-            if nc.autor != post.autor:
-                if Contribuyente.objects.get(nc=nc):
-                    a = Contribuyente.objects.get(nc=nc)
-                    a.contribuyente.add(request.user)
-                    a.save()
-
+            #Ver como hacer con los contribuyentes a la NC
             post.nc = nc
             post.save()
             return redirect('AccionInm-detail', pk=post.pk)
@@ -65,12 +60,6 @@ def AccionInm_edit(request, pk):
             b= form.save(commit=False)
             b.autor = request.user
             b.nc = nc
-
-            if nc.autor != request.user:
-                if Contribuyente.objects.get(nc=nc):
-                    a = Contribuyente.objects.get(nc=nc)
-                    a.contribuyente.add(request.user)
-                    a.save()
 
             b.created_date = timezone.now()
             b.save()
@@ -125,7 +114,7 @@ def accionInm_por_NC(request):
     nc_requerida = request.GET['NC']
     nc_buscada = NC.objects.get(pk=nc_requerida)
     acc = AccionInm.objects.filter(nc=nc_buscada)
-    return render(request, 'moduloNC/ac_inm_x_nc.html', {'ai':acc,'nc': nc_requerida})
+    return render(request, 'moduloNC/ac_inm_x_nc.html', {'ai':acc,'nc': nc_buscada})
 
 class AnalisisCausaDetailView(generic.DetailView):
     model = AnalisisCausa
@@ -138,12 +127,7 @@ def analisiscausa_new(request,pk):
         if form.is_valid():
             post = form.save(commit=False)
             post.autor = request.user
-            if nc.autor != post.autor:
-                if Contribuyente.objects.get(nc=nc):
-                    a = Contribuyente.objects.get(nc=nc)
-                    a.contribuyente.add(request.user)
-                    a.save()
-
+            #Ver como hacer con los contribuyentes de las NC
             post.nc = nc
             post.save()
             return redirect('AnalisisCausa-detail', pk=post.pk)
@@ -159,7 +143,7 @@ def analisiscausa_por_NC(request):
     nc_requerida = request.GET['NC']
     nc_buscada = NC.objects.get(pk=nc_requerida)
     ac = AnalisisCausa.objects.filter(nc=nc_buscada)
-    return render(request, 'moduloNC/analisiscausa_x_nc.html', {'ac':ac,'nc': nc_requerida})
+    return render(request, 'moduloNC/analisiscausa_x_nc.html', {'ac':ac,'nc': nc_buscada})
 
 
 def AnalisisCausa_publicar(request, pk):
@@ -208,19 +192,13 @@ def AnalisisCausa_edit(request, pk):
             b.autor = request.user
             b.nc = nc
 
-            if nc.autor != request.user:
-                if Contribuyente.objects.get(nc=nc):
-                    a = Contribuyente.objects.get(nc=nc)
-                    a.contribuyente.add(request.user)
-                    a.save()
-
 
             b.save()
             return redirect('AnalisisCausa-detail', pk=b.pk)
 
 
     else:
-        form = AccionInmForm(initial={'descr':post.descr})
+        form = AnalisisForm(initial={'descr':post.descr})
     return render(request, 'moduloNC/nuevaAnalisis.html', {'form': form})
 
 #Acción Correctiva
@@ -236,11 +214,6 @@ def accioncorrectiva_new(request,pk):
         if form.is_valid():
             post = form.save(commit=False)
             post.autor = request.user
-            if nc.autor != post.autor:
-                if Contribuyente.objects.get(nc=nc):
-                    a = Contribuyente.objects.get(nc=nc)
-                    a.contribuyente.add(request.user)
-                    a.save()
 
             post.nc = nc
             post.save()
@@ -257,7 +230,7 @@ def accioncorrectiva_por_NC(request):
     nc_requerida = request.GET['NC']
     nc_buscada = NC.objects.get(pk=nc_requerida)
     ac = AccionCorrectiva.objects.filter(nc=nc_buscada)
-    return render(request, 'moduloNC/accioncorrectiva_x_nc.html', {'ac':ac,'nc': nc_requerida})
+    return render(request, 'moduloNC/accioncorrectiva_x_nc.html', {'ac':ac,'nc': nc_buscada})
 
 
 def AccionCorrectiva_publicar(request, pk):
@@ -305,14 +278,6 @@ def AccionCorrectiva_edit(request, pk):
             b= form.save(commit=False)
             b.autor = request.user
             b.nc = nc
-
-            if nc.autor != request.user:
-                if Contribuyente.objects.get(nc=nc):
-                    a = Contribuyente.objects.get(nc=nc)
-                    a.contribuyente.add(request.user)
-                    a.save()
-
-
             b.save()
             return redirect('AccionCorrectiva-detail', pk=b.pk)
 
@@ -407,13 +372,6 @@ def verificacion_edit(request, pk):
             b.autor = request.user
             b.nc = nc
 
-            if nc.autor != request.user:
-                if Contribuyente.objects.get(nc=nc):
-                    a = Contribuyente.objects.get(nc=nc)
-                    a.contribuyente.add(request.user)
-                    a.save()
-
-
             b.save()
             return redirect('VerificaAC-detail', pk=b.pk)
 
@@ -436,11 +394,6 @@ def archivo_new(request,pk):
         if form.is_valid():
             post = form.save(commit=False)
             post.autor = request.user
-            if nc.autor != post.autor:
-                if Contribuyente.objects.get(nc=nc):
-                    a = Contribuyente.objects.get(nc=nc)
-                    a.contribuyente.add(request.user)
-                    a.save()
 
             post.nc = nc
             post.save()
@@ -457,7 +410,7 @@ def archivo_por_NC(request):
     nc_requerida = request.GET['NC']
     nc_buscada = NC.objects.get(pk=nc_requerida)
     ar = Archivo.objects.filter(nc=nc_buscada)
-    return render(request, 'moduloNC/archivo_x_nc.html', {'ar':ar,'nc': nc_requerida})
+    return render(request, 'moduloNC/archivo_x_nc.html', {'ar':ar,'nc': nc_buscada})
 
 
 def Archivo_publicar(request, pk):
@@ -553,12 +506,6 @@ def cierreNC_new(request,pk):
         if form.is_valid():
             post = form.save(commit=False)
             post.autor = request.user
-            if nc.autor != post.autor:
-                if Contribuyente.objects.get(nc=nc):
-                    a = Contribuyente.objects.get(nc=nc)
-                    a.contribuyente.add(request.user)
-                    a.save()
-
             post.nc = nc
             post.save()
             return redirect('CierreNC-detail', pk=post.pk)
